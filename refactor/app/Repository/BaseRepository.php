@@ -2,10 +2,10 @@
 
 namespace DTApi\Repository;
 
-use Validator;
-use Illuminate\Database\Eloquent\Model;
 use DTApi\Exceptions\ValidationException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Validator;
 
 class BaseRepository
 {
@@ -23,7 +23,7 @@ class BaseRepository
     /**
      * @param Model $model
      */
-    public function __construct(Model $model = null)
+    public function __construct( Model $model = null )
     {
         $this->model = $model;
     }
@@ -56,14 +56,14 @@ class BaseRepository
      * @param integer $id
      * @return Model|null
      */
-    public function find($id)
+    public function find( $id )
     {
-        return $this->model->find($id);
+        return $this->model->find( $id );
     }
 
-    public function with($array)
+    public function with( $array )
     {
-        return $this->model->with($array);
+        return $this->model->with( $array );
     }
 
     /**
@@ -71,9 +71,9 @@ class BaseRepository
      * @return Model
      * @throws ModelNotFoundException
      */
-    public function findOrFail($id)
+    public function findOrFail( $id )
     {
-        return $this->model->findOrFail($id);
+        return $this->model->findOrFail( $id );
     }
 
     /**
@@ -81,7 +81,7 @@ class BaseRepository
      * @return Model
      * @throws ModelNotFoundException
      */
-    public function findBySlug($slug)
+    public function findBySlug( $slug )
     {
 
         return $this->model->where('slug', $slug)->first();
@@ -100,24 +100,24 @@ class BaseRepository
      * @param array $attributes
      * @return Model
      */
-    public function instance(array $attributes = [])
+    public function instance( array $attributes = [] )
     {
         $model = $this->model;
-        return new $model($attributes);
+        return new $model( $attributes );
     }
 
     /**
      * @param int|null $perPage
      * @return mixed
      */
-    public function paginate($perPage = null)
+    public function paginate( $perPage = null )
     {
-        return $this->model->paginate($perPage);
+        return $this->model->paginate( $perPage );
     }
 
-    public function where($key, $where)
+    public function where( $key, $where )
     {
-        return $this->model->where($key, $where);
+        return $this->model->where( $key, $where );
     }
 
     /**
@@ -127,13 +127,14 @@ class BaseRepository
      * @param array $customAttributes
      * @return \Illuminate\Validation\Validator
      */
-    public function validator(array $data = [], $rules = null, array $messages = [], array $customAttributes = [])
+    public function validator( array $data = [], $rules = null, array $messages = [], array $customAttributes = [])
     {
-        if (is_null($rules)) {
+        if ( is_null($rules) )
+        {
             $rules = $this->validationRules;
         }
 
-        return Validator::make($data, $rules, $messages, $customAttributes);
+        return Validator::make( $data, $rules, $messages, $customAttributes );
     }
 
     /**
@@ -144,19 +145,19 @@ class BaseRepository
      * @return bool
      * @throws ValidationException
      */
-    public function validate(array $data = [], $rules = null, array $messages = [], array $customAttributes = [])
+    public function validate( array $data = [], $rules = null, array $messages = [], array $customAttributes = [] )
     {
-        $validator = $this->validator($data, $rules, $messages, $customAttributes);
-        return $this->_validate($validator);
+        $validator = $this->validator( $data, $rules, $messages, $customAttributes );
+        return $this->_validate( $validator );
     }
 
     /**
      * @param array $data
      * @return Model
      */
-    public function create(array $data = [])
+    public function create( array $data = [] )
     {
-        return $this->model->create($data);
+        return $this->model->create( $data );
     }
 
     /**
@@ -166,8 +167,8 @@ class BaseRepository
      */
     public function update($id, array $data = [])
     {
-        $instance = $this->findOrFail($id);
-        $instance->update($data);
+        $instance = $this->findOrFail( $id );
+        $instance->update( $data );
         return $instance;
     }
 
@@ -176,9 +177,9 @@ class BaseRepository
      * @return Model
      * @throws \Exception
      */
-    public function delete($id)
+    public function delete( $id )
     {
-        $model = $this->findOrFail($id);
+        $model = $this->findOrFail( $id );
         $model->delete();
         return $model;
     }
@@ -190,13 +191,15 @@ class BaseRepository
      */
     protected function _validate(\Illuminate\Validation\Validator $validator)
     {
-        if (!empty($attributeNames = $this->validatorAttributeNames())) {
-            $validator->setAttributeNames($attributeNames);
+        if ( !empty($attributeNames = $this->validatorAttributeNames()) )
+        {
+            $validator->setAttributeNames( $attributeNames );
         }
 
-        if ($validator->fails()) {
+        if ( $validator->fails() )
+        {
             return false;
-            throw (new ValidationException)->setValidator($validator);
+            throw (new ValidationException)->setValidator( $validator );
         }
 
         return true;

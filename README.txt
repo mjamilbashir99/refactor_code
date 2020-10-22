@@ -8,7 +8,7 @@ Thank you and good luck!
 
 Code to refactor
 =================
-1) app/Http/Controllers/BookingController.php
+1) app/Http/Controllers/Booking.php
 2) app/Repository/BookingRepository.php
 
 Code to write tests
